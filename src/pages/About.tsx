@@ -69,7 +69,7 @@ const About: React.FC = () => {
                 </div>
               </div>
               <a
-                href="/src/img/resume.pdf"
+                href="/img/resume.pdf"
                 download
                 className="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
               >
@@ -80,7 +80,7 @@ const About: React.FC = () => {
             <div className="animate-slide-up">
               <div className="relative">
                 <img
-                  src="/src/img/heroimg.png"
+                  src="/img/heroimg.png"
                   alt="Working on projects"
                   className="rounded-2xl shadow-2xl"
                 />
@@ -217,7 +217,7 @@ const About: React.FC = () => {
             </div>
             <div className="animate-slide-up">
               <img
-                src="/src/img/2.png"
+                src="/img/2.png"
                 alt="Alex in a casual setting"
                 className="rounded-2xl shadow-2xl"
               />

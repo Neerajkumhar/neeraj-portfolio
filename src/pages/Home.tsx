@@ -34,7 +34,7 @@ const Home: React.FC = () => {
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <a
-                  href="/src/img/resume.pdf"
+                  href="/img/resume.pdf"
                   download
                   className="inline-flex items-center px-6 py-3 border-2 border-primary-600 text-primary-600 dark:text-primary-400 rounded-lg hover:bg-primary-600 hover:text-white dark:hover:text-white transition-colors"
                 >
@@ -78,7 +78,7 @@ const Home: React.FC = () => {
             <div className="relative">
               <div className="w-80 h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-8 border-white dark:border-gray-800 shadow-2xl bg-gradient-to-br from-primary-100 to-accent-100 dark:from-primary-900/20 dark:to-accent-900/20">
                 <img
-                  src="/src/img/profile.png"
+                  src="/img/profile.png"
                   alt="Neeraj Kumhar"
                   className="w-full h-full object-cover"
                 />
