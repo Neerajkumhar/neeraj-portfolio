@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Download, Github, Linkedin, Mail, MapPin, Coffee } from 'lucide-react';
 import { projects } from '../data/projects';
 
+import { useEffect } from 'react';
 const Home: React.FC = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="animate-fade-in">
       {/* Hero Section */}

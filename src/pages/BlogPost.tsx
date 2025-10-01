@@ -5,7 +5,11 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { blogPosts } from '../data/blog';
 
+import { useEffect } from 'react';
 const BlogPost: React.FC = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const { id } = useParams<{ id: string }>();
   const post = blogPosts.find(p => p.id === id);
 

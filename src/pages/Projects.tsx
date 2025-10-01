@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { ExternalLink, Github, Filter } from 'lucide-react';
 import { projects, categories, Project } from '../data/projects';
 
+import { useEffect } from 'react';
 const Projects: React.FC = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 

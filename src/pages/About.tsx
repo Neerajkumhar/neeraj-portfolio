@@ -1,7 +1,11 @@
 import React from 'react';
 import { Download, Award, Calendar, MapPin, Heart, Code2, Palette, Database } from 'lucide-react';
 
+import { useEffect } from 'react';
 const About: React.FC = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const skills = {
     'Frontend': {
       icon: <Palette className="h-6 w-6" />,
