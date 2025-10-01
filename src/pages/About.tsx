@@ -19,21 +19,29 @@ const About: React.FC = () => {
 
   const experience = [
     {
-      title: 'Internship - Full Stack Developer',
+      title: 'Freelancer - Full Stack Developer',
       company: 'TechFrigate',
       period: '2025 - Present',
-      description: 'Lead development of enterprise web applications serving 100k+ users. Architected microservices infrastructure and mentored junior developers.',
+      description: 'Working as a freelance full-stack developer, delivering end-to-end web solutions for clients across various industries. Specializing in React, Node.js, and cloud deployments.',
+      achievements: ['Improved app performance by 40%', 'Led team of 5 developers', 'Implemented CI/CD pipeline']
+    },
+
+    {
+      title: 'Intern - Web Developer',
+      company: 'TechFrigate',
+      period: '2025 (6 - Month)',
+      description: 'Contributed to full-stack development of client projects using React and Node.js. Gained experience in agile methodologies and version control.',
       achievements: ['Improved app performance by 40%', 'Led team of 5 developers', 'Implemented CI/CD pipeline']
     },
     {
       title: 'Project Lead',
-      company: 'Vagwiin',
-      period: '2025 - Present',
+      company: 'Vagwiin It Solutions',
+      period: '2024 - 2025',
       description: 'Developed responsive web applications using React and modern CSS frameworks. Collaborated with UX designers to implement pixel-perfect designs.',
       achievements: ['Built 15+ client projects', 'Reduced bundle size by 35%', 'Introduced TypeScript to team']
     },
     {
-      title: 'Junior Web Developer',
+      title: 'Senior Web Developer',
       company: 'JodhanaShop Startup',
       period: '2022 - 2024',
       description: 'Built dynamic web applications and learned full-stack development fundamentals. Contributed to both frontend and backend development.',
