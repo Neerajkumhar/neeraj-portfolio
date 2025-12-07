@@ -44,7 +44,7 @@ const Contact: React.FC = () => {
       icon: <Mail className="h-6 w-6" />,
       title: 'Email',
       value: 'neerajarod@gmail.com',
-      href: 'neerajarod@gmail.com'
+      href: 'mailto:neerajarod@gmail.com'
     },
     {
       icon: <Phone className="h-6 w-6" />,
@@ -55,7 +55,7 @@ const Contact: React.FC = () => {
     {
       icon: <MapPin className="h-6 w-6" />,
       title: 'Location',
-      value: 'Jodhpur Raj, IND',
+      value: 'Jodhpur, India (Remote Ready)',
       href: 'https://maps.app.goo.gl/JhR8VrCoLTH8tkHS8'
     }
   ];
@@ -88,10 +88,10 @@ const Contact: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-              Get In <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-accent-600">Touch</span>
+              Ready to <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-accent-600">Ship?</span>
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Have a project in mind or just want to chat about web development? I'd love to hear from you.
+              Accepting new React & Node.js contracts. If you have a design ready or a backlog that needs clearing, let's talk numbers.
             </p>
           </div>
         </div>
@@ -117,7 +117,6 @@ const Contact: React.FC = () => {
                   </div>
                 </div>
               )}
-
               {submitStatus === 'error' && (
                 <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
                   <div className="flex items-center">
@@ -183,7 +182,7 @@ const Contact: React.FC = () => {
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Message *
                   </label>
-                  <textarea
+                    <textarea
                     id="message"
                     name="message"
                     value={formData.message}
@@ -191,7 +190,7 @@ const Contact: React.FC = () => {
                     required
                     rows={6}
                     className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-colors resize-none"
-                    placeholder="Tell me about your project or what you have in mind..."
+                      placeholder="Hi Neeraj, I have a Figma design for a SaaS dashboard. Need it built in Next.js by next Friday..."
                   />
                 </div>
                 
@@ -268,10 +267,10 @@ const Contact: React.FC = () => {
 
                 <div className="mt-8 p-6 bg-gradient-to-r from-primary-600 to-accent-600 rounded-xl text-white">
                   <h4 className="text-lg font-semibold mb-2">
-                    Available for Work
+                    Current Availability: Open
                   </h4>
                   <p className="text-primary-100 text-sm">
-                    I'm currently available for freelance projects and full-time opportunities. Let's discuss how we can work together!
+                    Specializing in white-label agency work. Typical turnaround for landing pages: 3-5 days. Complex apps: 2-4 weeks.
                   </p>
                 </div>
               </div>

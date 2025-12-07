@@ -23,29 +23,23 @@ const About: React.FC = () => {
 
   const experience = [
     {
-      title: 'Freelancer - Full Stack Developer',
-      company: 'TechFrigate',
-      period: '2025 - Present',
-      description: 'Working as a freelance full-stack developer, delivering end-to-end web solutions for clients across various industries. Specializing in React, Node.js, and cloud deployments.',
-      achievements: ['Improved app performance by 40%', 'Led team of 5 developers', 'Implemented CI/CD pipeline']
-    },
-
-    {
       title: 'Intern - Web Developer',
       company: 'TechFrigate',
-      period: '2025 (6 - Month)',
+      period: 'Jan 2025 - Jun 2025',
       description: 'Contributed to full-stack development of client projects using React and Node.js. Gained experience in agile methodologies and version control.',
-      achievements: ['Improved app performance by 40%', 'Led team of 5 developers', 'Implemented CI/CD pipeline']
+      achievements: ['Built core features and fixes', 'Improved unit test coverage', 'Collaborated closely with designers and engineers']
     },
+
+    
     {
-      title: 'Project Lead',
+      title: 'Lead Developer',
       company: 'Vagwiin It Solutions',
       period: '2024 - 2025',
-      description: 'Developed responsive web applications using React and modern CSS frameworks. Collaborated with UX designers to implement pixel-perfect designs.',
+      description: 'Spearheaded the development of responsive web applications using React and modern CSS frameworks. Collaborated with UX designers to implement pixel-perfect designs.',
       achievements: ['Built 15+ client projects', 'Reduced bundle size by 35%', 'Introduced TypeScript to team']
     },
     {
-      title: 'Senior Web Developer',
+      title: 'Full-Stack Developer (Contract)',
       company: 'JodhanaShop Startup',
       period: '2022 - 2024',
       description: 'Built dynamic web applications and learned full-stack development fundamentals. Contributed to both frontend and backend development.',
@@ -64,16 +58,16 @@ const About: React.FC = () => {
                 About <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-accent-600">Me</span>
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-                I'm a passionate full-stack developer with over 5 years of experience creating digital experiences that make a difference. I believe in writing clean, maintainable code and building products that users love.
+                I am a Full-Stack Engineer focused on performance and scalability. For the past 3 years, I have been building production-grade applications for clients, moving beyond simple websites to complex dashboards and e-commerce systems. I believe in writing clean, maintainable code that agencies can trust.
               </p>
               <div className="flex flex-wrap gap-4 mb-8">
                 <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
                   <MapPin className="h-4 w-4" />
-                  <span>Jodhpur Rajasthan, IND</span>
+                    <span>Jodhpur, India (Remote Ready)</span>
                 </div>
                 <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
                   <Calendar className="h-4 w-4" />
-                  <span>5+ Years Experience</span>
+                  <span>3 Years Experience</span>
                 </div>
                 <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
                   <Heart className="h-4 w-4" />
@@ -100,8 +94,8 @@ const About: React.FC = () => {
                   <div className="flex items-center space-x-2">
                     <Award className="h-8 w-8 text-primary-600 dark:text-primary-400" />
                     <div>
-                      <div className="font-bold text-gray-900 dark:text-white">50+</div>
-                      <div className="text-sm text-gray-600 dark:text-gray-300">Projects</div>
+                      <div className="font-bold text-gray-900 dark:text-white">15+</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-300">Live Projects</div>
                     </div>
                   </div>
                 </div>
