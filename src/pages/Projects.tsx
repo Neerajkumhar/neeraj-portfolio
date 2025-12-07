@@ -23,10 +23,10 @@ const Projects: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-              My <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-accent-600">Projects</span>
+              Selected <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-accent-600">Case Studies</span>
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-12">
-              A collection of projects I've worked on, showcasing different technologies and approaches to solving real-world problems.
+              Revenue-generating web applications and production systems technical summaries focused on architecture, scale, and impact.
             </p>
             
             {/* Filter Controls */}
@@ -103,7 +103,7 @@ const Projects: React.FC = () => {
       <section className={`py-20 ${selectedCategory === 'All' ? 'bg-gray-50 dark:bg-gray-800' : 'bg-white dark:bg-gray-900'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-12 text-center">
-            {selectedCategory === 'All' ? 'All Projects' : `${selectedCategory} Projects`}
+            {selectedCategory === 'All' ? 'Selected Case Studies' : `${selectedCategory} Projects`}
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProjects.map((project, index) => (

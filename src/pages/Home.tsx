@@ -18,16 +18,13 @@ const Home: React.FC = () => {
             <div className="animate-slide-in-left">
               <div className="flex items-center space-x-2 text-primary-600 dark:text-primary-400 mb-4">
                 <MapPin className="h-4 w-4" />
-                <span className="text-sm">Jodhpur Rajasthan, IND</span>
+                <span className="text-sm">Jodhpur, India (Remote Ready)</span>
               </div>
               <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-6">
-                Hi, I'm{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-accent-600">
-                  Neeraj Kumhar
-                </span>
+                I Build Scalable Full-Stack Applications.
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-                A passionate <strong>Full-Stack Developer</strong> crafting exceptional digital experiences with modern web technologies. I love turning complex problems into simple, beautiful solutions.
+                Specializing in high-performance React frontends and scalable Node.js backends. 3 years of building production-ready web solutions not just code.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Link
@@ -68,7 +65,7 @@ const Home: React.FC = () => {
                   <Linkedin className="h-5 w-5" />
                 </a>
                 <a
-                  href="mailto:neerajarod@gmail.com"
+                  href="mailto:nccrajarod@gmail.com"
                   className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-white dark:hover:bg-gray-700 transition-colors"
                   aria-label="Email"
                 >
@@ -101,10 +98,10 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8 text-center">
             {[
-              { number: '5+', label: 'Years Experience' },
-              { number: '50+', label: 'Projects Completed' },
+              { number: '3', label: 'Years Experience' },
+              { number: '15+', label: 'Live Projects' },
               { number: '15+', label: 'Technologies' },
-              { number: '100%', label: 'Client Satisfaction' },
+              { number: 'React & Node.js', label: 'Expert' },
             ].map((stat, index) => (
               <div key={index} className="animate-slide-up" style={{ animationDelay: `${index * 100}ms` }}>
                 <div className="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">
@@ -135,18 +132,18 @@ const Home: React.FC = () => {
             {[
               {
                 title: 'Frontend Development',
-                description: 'Creating responsive, interactive user interfaces with React, Vue, and modern CSS frameworks.',
-                technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Next.js'],
+                description: 'Pixel-perfect implementation of Figma designs using React, Next.js, and Tailwind. Focus on accessibility and performance.',
+                technologies: ['React', 'Next.js', 'Tailwind CSS', 'TypeScript'],
               },
               {
                 title: 'Backend Development',
-                description: 'Building scalable server-side applications with Node.js, Python, and cloud technologies.',
-                technologies: ['Node.js', 'Express', 'PostgreSQL', 'AWS'],
+                description: 'Building secure REST APIs and database architectures with Node.js, Express, and PostgreSQL.',
+                technologies: ['Node.js', 'Express', 'PostgreSQL', 'Docker'],
               },
               {
                 title: 'Full-Stack Solutions',
-                description: 'Delivering complete web applications from concept to deployment with modern DevOps practices.',
-                technologies: ['Docker', 'CI/CD', 'Microservices', 'API Design'],
+                description: 'End-to-end development. From database schema design to the final UI deployment.',
+                technologies: ['GraphQL', 'CI/CD', 'Docker', 'Vercel'],
               },
             ].map((service, index) => (
               <div
