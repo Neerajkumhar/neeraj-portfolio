@@ -12,131 +12,110 @@ export interface BlogPost {
 export const blogPosts: BlogPost[] = [
   {
     id: '1',
-    title: 'Building Scalable React Applications with TypeScript',
-    excerpt: 'Learn how to structure and build maintainable React applications using TypeScript, focusing on best practices and architectural patterns.',
-    content: `# Building Scalable React Applications with TypeScript
+    title: 'How I Built a Real-Time Inventory System with React & Socket.io',
+    excerpt: 'A deep dive into the Culturcraft architecture. How I handled state management for 500+ SKUs, optimized MongoDB aggregations for <100ms queries, and prevented race conditions in the shopping cart.',
+    content: `# How I Built a Real-Time Inventory System with React & Socket.io
 
-TypeScript has become the de facto standard for building large-scale React applications. In this post, we'll explore the best practices and architectural patterns that will help you build maintainable and scalable React applications.
+This post is a deep dive into the architecture behind the Culturcraft multi-vendor marketplace. I'll walk through the main technical challenges we faced — large catalog state management, high-performance MongoDB aggregations, real-time inventory syncing with Socket.io, and approaches we used to prevent race conditions and maintain data consistency.
 
-## Why TypeScript?
+## Problem Overview
 
-TypeScript provides several benefits:
-- **Type Safety**: Catch errors at compile time
-- **Better IDE Support**: Enhanced autocomplete and refactoring
-- **Improved Code Documentation**: Types serve as documentation
-- **Easier Refactoring**: Confident code changes with type checking
+Culturcraft needed to support 500+ SKUs across multiple vendors with frequent inventory updates (stock changes, reservations during checkout, returns). Key requirements:
+- Real-time inventory updates on product pages and in the cart
+- Fast, paginated product listing with complex filters and aggregations
+- Consistent stock levels during concurrent checkouts
 
-## Project Structure
+## System Architecture (High Level)
 
-A well-organized project structure is crucial for scalability:
+- Frontend: React with a centralized store (Redux) to manage product lists, cart state, and optimistic UI updates.
+- Realtime Layer: Socket.io channels for inventory updates (room per product or vendor) and presence tracking for race detection.
+- Backend: Node.js + Express handling API requests, Socket.io server for events, and robust database access layer.
+- Database: MongoDB with carefully designed indexes and aggregation pipelines for filters and faceted search.
 
-\`\`\`
-src/
-  components/
-    common/
-    layout/
-  pages/
-  hooks/
-  context/
-  types/
-  utils/
-\`\`\`
+## State Management for 500+ SKUs
 
-## Component Patterns
+We used Redux for global state with normalized stores:
 
-### 1. Prop Types Definition
-
-Always define clear interfaces for your component props:
-
-\`\`\`typescript
-interface ButtonProps {
-  variant: 'primary' | 'secondary';
-  size: 'sm' | 'md' | 'lg';
-  onClick: () => void;
-  children: React.ReactNode;
-  disabled?: boolean;
+\`\`\`text
+products: {
+  byId: { <productId>: { ... } },
+  allIds: [ ... ],
+  filters: { category, priceRange, vendor },
 }
-
-const Button: React.FC<ButtonProps> = ({ variant, size, onClick, children, disabled = false }) => {
-  // Component implementation
-};
-\`\`\`
-
-### 2. Generic Components
-
-Create reusable components with generics:
-
-\`\`\`typescript
-interface ListProps<T> {
-  items: T[];
-  renderItem: (item: T) => React.ReactNode;
-  keyExtractor: (item: T) => string;
-}
-
-function List<T>({ items, renderItem, keyExtractor }: ListProps<T>) {
-  return (
-    <ul>
-      {items.map(item => (
-        <li key={keyExtractor(item)}>
-          {renderItem(item)}
-        </li>
-      ))}
-    </ul>
-  );
+cart: {
+  items: { <productId>: quantity },
+  pendingReservations: { <reservationId>: { productId, qty } }
 }
 \`\`\`
 
-## State Management
+Normalization keeps memory usage predictable and makes updates (from Socket.io events) O(1) for individual SKUs. We implemented batched updates from the socket layer to avoid excessive re-renders for high-frequency updates.
 
-For complex applications, consider using context with reducers:
+## MongoDB Aggregations Under 100ms
 
-\`\`\`typescript
-interface AppState {
-  user: User | null;
-  loading: boolean;
-  error: string | null;
+To keep complex filters and sort queries fast:
+
+- Added compound indexes combining vendor, category, price, and availability fields.
+- Used pre-aggregated materialized views for expensive joins (e.g., ratings + inventory availability) refreshed asynchronously.
+- Leveraged the aggregation pipeline with $facet for paginated results and computed metadata in a single query, avoiding N+1 requests.
+
+Example aggregation snippet we used:
+
+\`\`\`js
+db.products.aggregate([
+  { $match: { vendorId: ObjectId(vendorId), inStock: true, price: { $gte: min, $lte: max } } },
+  { $sort: { score: -1 } },
+  { $facet: { metadata: [ { $count: 'total' } ], data: [ { $skip: skip }, { $limit: limit } ] } }
+])
+\`\`\`
+
+With the right indexes and projection of only necessary fields, these queries consistently ran under 100ms for our dataset.
+
+## Preventing Race Conditions in Checkout
+
+Race conditions mostly occurred during high-concurrency checkout flows. Strategies used:
+
+1. Optimistic Reservations: When a user initiates checkout, we created a short-lived reservation record with a TTL (e.g., 5 minutes). The frontend shows reserved quantity immediately.
+2. Atomic Decrement: On final payment confirmation we performed an atomic update in MongoDB using a conditional decrement (findOneAndUpdate with a filter ensuring stock >= requestedQty).
+3. Socket-based Invalidations: On successful checkout, the backend emitted an inventory-update event to all connected clients for affected SKUs, ensuring carts and product pages updated in real time.
+
+Example atomic decrement:
+
+\`\`\`js
+const result = await db.products.findOneAndUpdate(
+  { _id: pid, stock: { $gte: qty } },
+  { $inc: { stock: -qty } },
+  { returnOriginal: false }
+);
+if (!result.value) {
+  // handle out-of-stock
 }
-
-type AppAction =
-  | { type: 'SET_USER'; payload: User }
-  | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'SET_ERROR'; payload: string };
-
-const appReducer = (state: AppState, action: AppAction): AppState => {
-  switch (action.type) {
-    case 'SET_USER':
-      return { ...state, user: action.payload };
-    // ... other cases
-    default:
-      return state;
-  }
-};
 \`\`\`
 
-## Testing with TypeScript
+## Socket.io Patterns
 
-TypeScript makes testing more reliable:
+- Namespaced rooms per product and vendor: `product:<id>`, `vendor:<id>` so clients only subscribe to relevant streams.
+- Debounced broadcast: For bursty inventory updates we buffered changes and emitted batched events every 250ms to reduce socket chatter.
+- Reconnect & reconciliation: On reconnect, clients re-fetch the latest inventory snapshot to prevent drift from missed events.
 
-\`\`\`typescript
-import { render, screen } from '@testing-library/react';
-import Button from './Button';
+## Testing & Observability
 
-describe('Button', () => {
-  it('renders with correct text', () => {
-    render(<Button variant="primary" size="md" onClick={() => {}}>Click me</Button>);
-    expect(screen.getByText('Click me')).toBeInTheDocument();
-  });
-});
-\`\`\`
+- Load testing with k6 to simulate concurrent checkouts and measure contention.
+- Instrumented key DB queries with APM (NewRelic / Elastic APM) and added query-level logging for slow aggregations.
+- Health checks and alerting on socket queue length and reservation failures.
+
+## Lessons Learned
+
+- Normalizing state and batching UI updates prevents performance regressions on the frontend.
+- Combining short-lived optimistic reservations with atomic DB operations balances UX and consistency.
+- Proper indexing and occasional materialized aggregations keep complex filtering snappy.
 
 ## Conclusion
 
-TypeScript significantly improves the developer experience and code quality in React applications. By following these patterns and best practices, you'll be able to build scalable, maintainable applications that your team can work on confidently.
-
-Remember: start small, be consistent, and gradually adopt more advanced patterns as your application grows.`,
-    date: '2025-01-15',
-    readTime: 8,
-    tags: ['React', 'TypeScript', 'Best Practices'],
+Building a real-time inventory system at scale is a cross-cutting effort across frontend, realtime layers, and the database. The combination of normalized client state, efficient aggregation pipelines, atomic DB updates, and a resilient Socket.io layer delivered a system that kept product pages fast and carts consistent under load.
+`,
+    date: '2025-12-08',
+    readTime: 12,
+    tags: ['System Architecture', 'Socket.io', 'MongoDB', 'Performance'],
     image: 'https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?auto=compress&cs=tinysrgb&w=600',
   },
   {
