@@ -93,7 +93,7 @@ if (!result.value) {
 
 ## Socket.io Patterns
 
-- Namespaced rooms per product and vendor: `product:<id>`, `vendor:<id>` so clients only subscribe to relevant streams.
+- Namespaced rooms per product and vendor: \`product:<id>\`, \`vendor:<id>\` so clients only subscribe to relevant streams.
 - Debounced broadcast: For bursty inventory updates we buffered changes and emitted batched events every 250ms to reduce socket chatter.
 - Reconnect & reconciliation: On reconnect, clients re-fetch the latest inventory snapshot to prevent drift from missed events.
 
