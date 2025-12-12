@@ -55,8 +55,8 @@ export const projects: Project[] = [
     image: '/img/culturaft.png',
     technologies: ['React', 'Redux', 'MongoDB', 'TypeScript'],
     category: 'Full Stack',
-    demoUrl: 'https://cultureaft.vercel.app/',
-    githubUrl: 'https://github.com/visuark-core/cultureaft',
+    demoUrl: 'https://culturaft-2-0.vercel.app/',
+    githubUrl: 'https://github.com/Neerajkumhar/Culturaft-2.0',
     featured: true,
   },
 
