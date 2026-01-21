@@ -3,15 +3,33 @@ import { useParams, Link } from 'react-router-dom';
 import { Calendar, Clock, ArrowLeft, Tag } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { blogPosts } from '../data/blog';
+import { BlogPost as BlogPostData } from '../data/blog';
 
 import { useEffect } from 'react';
 const BlogPost: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const [post, setPost] = React.useState<BlogPostData | undefined>(undefined);
+
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
-  const { id } = useParams<{ id: string }>();
-  const post = blogPosts.find(p => p.id === id);
+
+    const fetchPost = async () => {
+      if (!id) return;
+      try {
+        const response = await fetch(`/api/posts/${id}`);
+        if (!response.ok) {
+          setPost(undefined);
+          return;
+        }
+        const data = await response.json();
+        setPost(data);
+      } catch (error) {
+        console.error('Error fetching post:', error);
+      }
+    };
+
+    fetchPost();
+  }, [id]);
 
   if (!post) {
     return (
@@ -47,7 +65,7 @@ const BlogPost: React.FC = () => {
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Blog
           </Link>
-          
+
           <div className="text-center">
             <div className="flex flex-wrap justify-center gap-2 mb-6">
               {post.tags.map((tag) => (
@@ -59,11 +77,11 @@ const BlogPost: React.FC = () => {
                 </span>
               ))}
             </div>
-            
+
             <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 animate-slide-up">
               {post.title}
             </h1>
-            
+
             <div className="flex items-center justify-center text-gray-500 dark:text-gray-400 mb-8 animate-slide-up" style={{ animationDelay: '150ms' }}>
               <Calendar className="h-5 w-5 mr-2" />
               <span className="mr-6">{new Date(post.date).toLocaleDateString()}</span>
@@ -159,8 +177,7 @@ const BlogPost: React.FC = () => {
             More Articles
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
-            {blogPosts
-              .filter(p => p.id !== post.id)
+            {(post ? ([] as BlogPostData[]) : [])
               .slice(0, 2)
               .map((relatedPost, index) => (
                 <Link

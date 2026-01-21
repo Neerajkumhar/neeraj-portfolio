@@ -1,11 +1,52 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, ArrowRight, Tag } from 'lucide-react';
-import { blogPosts } from '../data/blog';
+import { BlogPost } from '../data/blog';
 
 const Blog: React.FC = () => {
-  const featuredPost = blogPosts[0];
-  const otherPosts = blogPosts.slice(1);
+  const [allPosts, setAllPosts] = useState<BlogPost[]>([]);
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch('/api/posts');
+        if (!response.ok) throw new Error('Failed to fetch');
+        const data = await response.json();
+        setAllPosts(data);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
+      </div>
+    );
+  }
+
+  const featuredPost = allPosts[0];
+  const otherPosts = allPosts.slice(1);
+
+  if (!featuredPost) {
+    return (
+      <div className="min-h-screen pt-20 pb-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">No posts found</h2>
+        <p className="text-gray-600 dark:text-gray-400 mb-8">Check back later for new articles!</p>
+        <Link to="/admin" className="text-primary-600 hover:text-primary-700 font-medium">
+          Go to Admin Panel
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="animate-fade-in">
@@ -93,7 +134,7 @@ const Blog: React.FC = () => {
 };
 
 interface BlogCardProps {
-  post: typeof blogPosts[0];
+  post: BlogPost;
   index: number;
 }
 
@@ -118,7 +159,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => {
           </div>
         </div>
       </div>
-      
+
       <div className="p-6">
         <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
           <Link to={`/blog/${post.id}`}>
@@ -128,7 +169,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => {
         <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
           {post.excerpt}
         </p>
-        
+
         <div className="flex items-center justify-between">
           <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm">
             <Calendar className="h-4 w-4 mr-1" />
