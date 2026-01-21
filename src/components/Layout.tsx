@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Sun, Moon, Code2 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import LeetCodeStats from './LeetCodeStats';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,11 +35,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
       {/* Navigation */}
       <nav
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-          isScrolled
-            ? 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-lg'
-            : 'bg-transparent'
-        }`}
+        className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled
+          ? 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-lg'
+          : 'bg-transparent'
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -57,16 +57,17 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <Link
                   key={item.name}
                   to={item.path}
-                  className={`font-medium transition-colors hover:text-primary-600 dark:hover:text-primary-400 ${
-                    location.pathname === item.path
-                      ? 'text-primary-600 dark:text-primary-400'
-                      : 'text-gray-700 dark:text-gray-300'
-                  }`}
+                  className={`font-medium transition-colors hover:text-primary-600 dark:hover:text-primary-400 ${location.pathname === item.path
+                    ? 'text-primary-600 dark:text-primary-400'
+                    : 'text-gray-700 dark:text-gray-300'
+                    }`}
                 >
                   {item.name}
                 </Link>
               ))}
-              
+
+              <LeetCodeStats />
+
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
@@ -104,15 +105,17 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   <Link
                     key={item.name}
                     to={item.path}
-                    className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                      location.pathname === item.path
-                        ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20'
-                        : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800'
-                    }`}
+                    className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${location.pathname === item.path
+                      ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20'
+                      : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                      }`}
                   >
                     {item.name}
                   </Link>
                 ))}
+                <div className="px-3 py-2">
+                  <LeetCodeStats />
+                </div>
               </div>
             </div>
           )}
