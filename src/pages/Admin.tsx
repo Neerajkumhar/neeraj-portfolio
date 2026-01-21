@@ -4,6 +4,8 @@ import { Save, Eye, Trash2, Image as ImageIcon, Plus } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
+import { getPosts, createPost, deletePost as apiDeletePost } from '../utils/api';
+
 const Admin: React.FC = () => {
     const [posts, setPosts] = useState<BlogPost[]>([]);
     const [activeTab, setActiveTab] = useState<'editor' | 'preview'>('editor');
@@ -18,16 +20,13 @@ const Admin: React.FC = () => {
 
     // Load posts from API
     useEffect(() => {
-        fetchPosts();
+        fetchPostsData();
     }, []);
 
-    const fetchPosts = async () => {
+    const fetchPostsData = async () => {
         try {
-            const response = await fetch('/api/posts');
-            if (response.ok) {
-                const data = await response.json();
-                setPosts(data);
-            }
+            const data = await getPosts();
+            setPosts(data);
         } catch (error) {
             console.error('Error fetching posts:', error);
         }
@@ -44,22 +43,11 @@ const Admin: React.FC = () => {
         };
 
         try {
-            const response = await fetch('/api/posts', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newPost),
-            });
-
-            if (response.ok) {
-                // eslint-disable-next-line no-alert
-                alert('Post published successfully!');
-                clearForm();
-                fetchPosts(); // Refresh list
-            } else {
-                throw new Error('Failed to save post');
-            }
+            await createPost(newPost);
+            // eslint-disable-next-line no-alert
+            alert('Post published successfully!');
+            clearForm();
+            fetchPostsData(); // Refresh list
         } catch (error) {
             console.error('Error saving post:', error);
             // eslint-disable-next-line no-alert
@@ -71,15 +59,8 @@ const Admin: React.FC = () => {
         if (!confirm('Are you sure you want to delete this post?')) return;
 
         try {
-            const response = await fetch(`/api/posts/${id}`, {
-                method: 'DELETE',
-            });
-
-            if (response.ok) {
-                fetchPosts(); // Refresh list
-            } else {
-                throw new Error('Failed to delete post');
-            }
+            await apiDeletePost(id);
+            fetchPostsData(); // Refresh list
         } catch (error) {
             console.error('Error deleting post:', error);
             // eslint-disable-next-line no-alert

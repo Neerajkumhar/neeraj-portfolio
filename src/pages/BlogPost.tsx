@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Calendar, Clock, ArrowLeft, Tag } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { BlogPost as BlogPostData } from '../data/blog';
+import { getPost } from '../utils/api';
 
-import { useEffect } from 'react';
 const BlogPost: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [post, setPost] = React.useState<BlogPostData | undefined>(undefined);
@@ -16,15 +16,11 @@ const BlogPost: React.FC = () => {
     const fetchPost = async () => {
       if (!id) return;
       try {
-        const response = await fetch(`/api/posts/${id}`);
-        if (!response.ok) {
-          setPost(undefined);
-          return;
-        }
-        const data = await response.json();
+        const data = await getPost(id);
         setPost(data);
       } catch (error) {
         console.error('Error fetching post:', error);
+        setPost(undefined);
       }
     };
 

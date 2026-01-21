@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, ArrowRight, Tag } from 'lucide-react';
 import { BlogPost } from '../data/blog';
+import { getPosts } from '../utils/api';
 
 const Blog: React.FC = () => {
   const [allPosts, setAllPosts] = useState<BlogPost[]>([]);
@@ -11,9 +12,7 @@ const Blog: React.FC = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch('/api/posts');
-        if (!response.ok) throw new Error('Failed to fetch');
-        const data = await response.json();
+        const data = await getPosts();
         setAllPosts(data);
       } catch (error) {
         console.error('Error fetching posts:', error);
