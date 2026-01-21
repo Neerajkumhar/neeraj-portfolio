@@ -47,7 +47,18 @@ const LeetCodeStats: React.FC = () => {
     }
 
     if (error || !stats) {
-        return null; // Keep hiding on error for now, or could show an error state
+        return (
+            <a
+                href="https://leetcode.com/u/neerajkumhar2005"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors font-medium"
+                title="Stats unavailable. Click to view profile."
+            >
+                <Trophy className="h-5 w-5 text-gray-400" />
+                <span className="hidden md:inline">LeetCode</span>
+            </a>
+        );
     }
 
     return (
@@ -116,7 +127,7 @@ const LeetCodeStats: React.FC = () => {
                     </div>
 
                     <a
-                        href="https://leetcode.com/neerajkumhar2005"
+                        href="https://leetcode.com/u/neerajkumhar2005"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="block mt-4 text-center text-xs text-gray-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
