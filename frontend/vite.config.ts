@@ -8,8 +8,6 @@ export default defineConfig({
     exclude: ['lucide-react'],
   },
   server: {
-    proxy: {
-      '/api': 'http://localhost:5000',
-    },
+    // Proxy is not needed as we use absolute URLs from VITE_API_URL
   },
 });

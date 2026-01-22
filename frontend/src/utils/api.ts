@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.MODE === 'development' ? 'http://localhost:5000' : '');
+const API_URL = (import.meta.env.VITE_API_URL || (import.meta.env.MODE === 'development' ? 'http://localhost:5000' : '')).replace(/\/$/, '');
 
 export const getPosts = async () => {
     const response = await fetch(`${API_URL}/api/posts`);

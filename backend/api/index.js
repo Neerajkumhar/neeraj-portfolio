@@ -10,7 +10,11 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials: true
+}));
 app.use(express.json());
 
 // Database Connection
@@ -21,7 +25,7 @@ mongoose.connect(process.env.MONGODB_URI)
 // Routes
 
 // GET all posts
-app.get('/api/posts', async (req, res) => {
+app.get(['/api/posts', '/posts'], async (req, res) => {
     try {
         const posts = await Post.find().sort({ date: -1 });
         res.json(posts);
@@ -32,7 +36,7 @@ app.get('/api/posts', async (req, res) => {
 });
 
 // GET single post
-app.get('/api/posts/:id', async (req, res) => {
+app.get(['/api/posts/:id', '/posts/:id'], async (req, res) => {
     try {
         const post = await Post.findOne({ id: req.params.id });
         if (!post) return res.status(404).json({ message: 'Post not found' });
@@ -44,7 +48,7 @@ app.get('/api/posts/:id', async (req, res) => {
 });
 
 // POST new post
-app.post('/api/posts', async (req, res) => {
+app.post(['/api/posts', '/posts'], async (req, res) => {
     const { title, excerpt, content, image, tags, readTime } = req.body;
     const newPost = new Post({
         id: `post-${Date.now()}`, // Simple ID generation
@@ -67,7 +71,7 @@ app.post('/api/posts', async (req, res) => {
 });
 
 // DELETE post
-app.delete('/api/posts/:id', async (req, res) => {
+app.delete(['/api/posts/:id', '/posts/:id'], async (req, res) => {
     try {
         const deletedPost = await Post.findOneAndDelete({ id: req.params.id });
         if (!deletedPost) return res.status(404).json({ message: 'Post not found' });
@@ -78,4 +82,10 @@ app.delete('/api/posts/:id', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Export for Vercel
+export default app;
+
+// Only listen when running locally
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
