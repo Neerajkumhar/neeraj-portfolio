@@ -1,46 +1,30 @@
 # Deployment Instructions
 
-You have successfully separated your project into two distinct applications: **frontend** and **backend**. This allows you to deploy them as separate projects on Vercel.
+The portfolio is a fully static site: a single Vite + React app with no backend, no database, and no server-side runtime. Blog posts live as typed data in `frontend/src/data/blog.ts`, and project cards are pulled from the public GitHub API at build/visit time.
 
-## 1. Deploying the Backend
-1.  Push your changes to GitHub.
-2.  Go to Vercel Dashboard -> Add New -> Project.
-3.  Select your repository.
-4.  **Important**: In "Root Directory" settings, click "Edit" and select `backend`.
-5.  **Environment Variables**: Add your `MONGODB_URI` from your local `.env` file to the Vercel project settings.
-6.  Deploy.
-6.  Once deployed, copy the **Domain** (e.g., `https://neeraj-portfolio-backend.vercel.app`).
+## 1. Deploying
 
-## 2. Connecting Frontend to Backend
-1.  **Locally**: Update `frontend/.env`:
-    ```properties
-    VITE_API_URL=https://<YOUR_NEW_BACKEND_URL>
-    ```
-    (Or `http://localhost:5000` if running backend locally).
-2.  **On Vercel**:
-    - Go to Vercel Dashboard -> Add New -> Project.
-    - Select your repository.
-    - **Important**: In "Root Directory" settings, click "Edit" and select `frontend`.
-    - In **Environment Variables**, add:
-      - Name: `VITE_API_URL`
-      - Value: `https://<YOUR_NEW_BACKEND_URL>` (the URL from Step 1).
-3.  Deploy.
+1. Push your changes to GitHub.
+2. Go to Vercel Dashboard -> Add New -> Project.
+3. Select your repository.
+4. **Important**: In "Root Directory" settings, click "Edit" and select `frontend`.
+5. Deploy.
 
-## 3. Running Locally
-To run both projects locally:
+No environment variables are required. `frontend/vercel.json` rewrites all paths to `index.html` so client-side routes like `/blog/1` resolve on refresh.
 
-**Terminal 1 (Backend):**
-```bash
-cd backend
-npm start
-```
+## 2. Running Locally
 
-**Terminal 2 (Frontend):**
 ```bash
 cd frontend
 npm run dev
 ```
 
+## 3. Editing Content
+
+**Blog posts** live in `frontend/src/data/blog.ts` as a `BlogPost[]`. Add an object with `id`, `title`, `excerpt`, `content` (markdown), `date`, `readTime`, `tags`, and `image`. The `id` becomes the URL (`/blog/<id>`), so keep them unique and stable once published. Posts are sorted newest-first automatically, so file order does not matter.
+
+**LeetCode stats** are hardcoded in `frontend/src/components/LeetCodeStats.tsx` under `STATS`. LeetCode's API sends no CORS headers, so the numbers cannot be fetched from the browser. Update them by hand if you want them current.
+
 ## Troubleshooting
-- **CORS Errors**: If you see CORS errors, ensure your backend `vercel.json` and `api/index.js` (which we fixed) are deployed correctly.
-- **404 Errors**: Ensure `VITE_API_URL` does not have a trailing slash (our code handles this, but it's good practice).
+- **404 on a nested route**: confirm the Root Directory is `frontend` and `frontend/vercel.json` is committed. Vite's dev server handles SPA fallback locally, so this only shows up in production.
+- **LeetCode numbers look stale**: that is expected; they are hardcoded rather than fetched.

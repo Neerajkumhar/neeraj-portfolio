@@ -1,3 +1,250 @@
+/* Latin-only subsets: the site has no Cyrillic/Greek/Vietnamese copy, and
+   importing the full `400.css` pulls ~30 unused woff2 files into the bundle. */
+@import '@fontsource/inter/latin-400.css';
+@import '@fontsource/inter/latin-500.css';
+@import '@fontsource/inter/latin-600.css';
+@import '@fontsource/newsreader/latin-400.css';
+@import '@fontsource/newsreader/latin-500.css';
+@import '@fontsource/newsreader/latin-600.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: #fafaf9;
+    --bg-raised: #ffffff;
+    --bg-sunken: #f5f5f4;
+    --text: #1a1a19;
+    --text-soft: #57534e;
+    --text-faint: #6e6862;
+    --rule: #e7e5e4;
+    --rule-strong: #d6d3d1;
+    --accent: #9a3412;
+    --accent-solid: #9a3412;
+    --accent-hover: #7c2d12;
+    /* Difficulty bars are meaningful non-text UI, so they need 3:1 against
+       their track; the -600 shades fail that in light mode (yellow-600 = 2.69). */
+    --diff-easy: #15803d;
+    --diff-medium: #a16207;
+    --diff-hard: #b91c1c;
+  }
+
+  .dark {
+    --bg: #17171a;
+    --bg-raised: #1f1f23;
+    --bg-sunken: #121214;
+    --text: #fafaf9;
+    --text-soft: #a8a29e;
+    --text-faint: #96908a;
+    --rule: #2e2e33;
+    --rule-strong: #44444b;
+    --accent: #ea580c;
+    /* Dark mode needs a deeper fill for white text on it; #ea580c only
+       reaches 3.56:1 against white, #c2410c reaches 5.18:1. */
+    --accent-solid: #c2410c;
+    --accent-hover: #ea580c;
+    --diff-easy: #4ade80;
+    --diff-medium: #facc15;
+    --diff-hard: #f87171;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: theme('fontFamily.sans');
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: theme('fontFamily.display');
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: #fafaf9;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* Quiet scrollbars that follow the theme */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--rule-strong) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--rule-strong);
+    border-radius: 9999px;
+    border: 3px solid var(--bg);
+  }
+}
+
+@layer components {
+  /* Uppercase mono label used for section eyebrows and metadata */
+  .label {
+    font-family: theme('fontFamily.mono');
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Editorial section heading: mono eyebrow + serif title */
+  .section-heading {
+    font-family: theme('fontFamily.display');
+    font-size: 2.25rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .rule-t {
+    border-top: 1px solid var(--rule);
+  }
+
+  .prose-body p {
+    margin-bottom: 1.15em;
+    color: var(--text-soft);
+  }
+
+  .prose-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .prose-body h2 {
+    font-size: 1.5rem;
+    margin: 2em 0 0.6em;
+    color: var(--text);
+  }
+
+  .prose-body h3 {
+    font-size: 1.25rem;
+    margin: 1.75em 0 0.5em;
+    color: var(--text);
+  }
+
+  .prose-body ul,
+  .prose-body ol {
+    margin: 0 0 1.15em 1.25em;
+    color: var(--text-soft);
+  }
+
+  .prose-body ul {
+    list-style: disc;
+  }
+
+  .prose-body ol {
+    list-style: decimal;
+  }
+
+  .prose-body li {
+    margin-bottom: 0.4em;
+  }
+
+  .prose-body code {
+    font-family: theme('fontFamily.mono');
+    font-size: 0.875em;
+    background-color: var(--bg-sunken);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 0.1em 0.35em;
+  }
+
+  .prose-body pre {
+    background-color: var(--bg-sunken);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 1rem 1.15rem;
+    margin-bottom: 1.4em;
+    overflow-x: auto;
+  }
+
+  .prose-body pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+  }
+
+  .prose-body a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .prose-body blockquote {
+    border-left: 2px solid var(--accent);
+    padding-left: 1.15rem;
+    margin: 1.5em 0;
+    color: var(--text-soft);
+    font-style: italic;
+  }
+
+  .prose-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.4em;
+    font-size: 0.9375rem;
+  }
+
+  .prose-body th,
+  .prose-body td {
+    border: 1px solid var(--rule);
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+  }
+
+  .prose-body th {
+    background-color: var(--bg-sunken);
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .prose-body strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .prose-body hr {
+    border: 0;
+    border-top: 1px solid var(--rule);
+    margin: 2.5em 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

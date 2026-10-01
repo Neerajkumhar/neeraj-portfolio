@@ -338,3 +338,9 @@ Stay curious, keep learning, and embrace these changes to remain competitive in 
     image: 'https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&w=600',
   },
 ];
+
+export const getPostsByDate = (): BlogPost[] =>
+  [...blogPosts].sort((a, b) => b.date.localeCompare(a.date));
+
+export const getPostById = (id: string | undefined): BlogPost | undefined =>
+  id ? blogPosts.find((post) => post.id === id) : undefined;

@@ -1,194 +1,229 @@
-import React, { useState } from 'react';
-import { ExternalLink, Github, Filter } from 'lucide-react';
-import { projects, categories, Project } from '../data/projects';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ExternalLink, Github, Star, GitFork, CircleDot } from 'lucide-react';
+import {
+  getLanguageColor,
+  getLanguages,
+  formatRelativeDate,
+  GITHUB_USERNAME,
+  Project,
+} from '../utils/github';
+import { useGithubRepos } from '../hooks/useGithubRepos';
 
-import { useEffect } from 'react';
-const Projects: React.FC = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+const PROFILE_URL = `https://github.com/${GITHUB_USERNAME}`;
 
-  const filteredProjects = selectedCategory === 'All' 
-    ? projects 
-    : projects.filter(project => project.category === selectedCategory);
-
-  const featuredProjects = projects.filter(project => project.featured);
+const RepoCard: React.FC<{ project: Project }> = ({ project }) => {
+  const color = getLanguageColor(project.language);
 
   return (
-    <div className="animate-fade-in">
-      {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-primary-50 to-accent-50 dark:from-gray-900 dark:to-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-              Selected <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-accent-600">Case Studies</span>
-            </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-12">
-              Revenue-generating web applications and production systems technical summaries focused on architecture, scale, and impact.
-            </p>
-            
-            {/* Filter Controls */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              {/* Desktop Filter */}
-              <div className="hidden sm:flex items-center space-x-2">
-                <Filter className="h-5 w-5 text-gray-600 dark:text-gray-300" />
-                <span className="text-gray-600 dark:text-gray-300">Filter by:</span>
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => setSelectedCategory(category)}
-                    className={`px-4 py-2 rounded-lg transition-colors ${
-                      selectedCategory === category
-                        ? 'bg-primary-600 text-white'
-                        : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-gray-700'
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
+    <article className="group bg-[var(--bg-raised)] border border-[var(--rule)] rounded-sm p-5 flex flex-col transition-colors duration-150 hover:border-[var(--rule-strong)]">
+      <div className="flex items-start justify-between gap-3">
+        <a
+          href={project.githubUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-mono text-[0.95rem] text-[var(--text)] hover:text-[var(--accent)] transition-colors duration-150 break-all"
+        >
+          {project.title}
+        </a>
+        {project.language !== 'Other' && (
+          <span className="label shrink-0 inline-flex items-center gap-1.5 text-[var(--text-soft)]">
+            {/* Dot carries the language color; the label text stays on token
+                color because GitHub's palette fails WCAG AA as small text. */}
+            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} aria-hidden="true" />
+            {project.language}
+          </span>
+        )}
+      </div>
 
-              {/* Mobile Filter */}
-              <div className="sm:hidden w-full max-w-xs">
-                <button
-                  onClick={() => setIsFilterOpen(!isFilterOpen)}
-                  className="w-full flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg text-gray-600 dark:text-gray-300"
-                >
-                  <span>Filter: {selectedCategory}</span>
-                  <Filter className="h-5 w-5" />
-                </button>
-                {isFilterOpen && (
-                  <div className="absolute z-10 mt-2 w-full max-w-xs bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg shadow-lg">
-                    {categories.map((category) => (
-                      <button
-                        key={category}
-                        onClick={() => {
-                          setSelectedCategory(category);
-                          setIsFilterOpen(false);
-                        }}
-                        className={`w-full text-left px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 ${
-                          selectedCategory === category ? 'text-primary-600 dark:text-primary-400' : 'text-gray-600 dark:text-gray-300'
-                        }`}
-                      >
-                        {category}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <p className="mt-3 text-[var(--text-soft)] text-[0.9rem] leading-relaxed flex-1">
+        {project.description}
+      </p>
 
-      {/* Featured Projects */}
-      {selectedCategory === 'All' && (
-        <section className="py-20 bg-white dark:bg-gray-900">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-12 text-center">
-              Featured Projects
-            </h2>
-            <div className="grid lg:grid-cols-2 gap-8">
-              {featuredProjects.slice(0, 2).map((project, index) => (
-                <ProjectCard key={project.id} project={project} featured index={index} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      <div className="mt-5 flex items-center gap-4 label text-[var(--text-faint)]">
+        <span className="inline-flex items-center gap-1">
+          <Star className="h-3.5 w-3.5" /> {project.stars}
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <GitFork className="h-3.5 w-3.5" /> {project.forks}
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <CircleDot className="h-3.5 w-3.5" /> {project.issues}
+        </span>
+        <span className="ml-auto">{formatRelativeDate(project.updatedAt)}</span>
+      </div>
 
-      {/* All Projects */}
-      <section className={`py-20 ${selectedCategory === 'All' ? 'bg-gray-50 dark:bg-gray-800' : 'bg-white dark:bg-gray-900'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-12 text-center">
-            {selectedCategory === 'All' ? 'Selected Case Studies' : `${selectedCategory} Projects`}
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProjects.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} />
-            ))}
-          </div>
-        </div>
-      </section>
-    </div>
+      <div className="mt-4 pt-4 border-t border-[var(--rule)] flex items-center gap-4">
+        <a
+          href={project.githubUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="label text-[var(--text-soft)] hover:text-[var(--accent)] transition-colors duration-150 inline-flex items-center gap-1.5 py-1"
+        >
+          <Github className="h-3.5 w-3.5" /> Code
+        </a>
+        {project.demoUrl && (
+          <a
+            href={project.demoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="label text-[var(--text-soft)] hover:text-[var(--accent)] transition-colors duration-150 inline-flex items-center gap-1.5 py-1"
+          >
+            <ExternalLink className="h-3.5 w-3.5" /> Live demo
+          </a>
+        )}
+      </div>
+    </article>
   );
 };
 
-interface ProjectCardProps {
-  project: Project;
-  featured?: boolean;
-  index: number;
-}
+const Projects: React.FC = () => {
+  const { repos, loading, error, retry } = useGithubRepos();
+  const [selectedLanguage, setSelectedLanguage] = useState('All');
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, featured = false, index }) => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const languages = useMemo(() => getLanguages(repos), [repos]);
+
+  useEffect(() => {
+    if (selectedLanguage !== 'All' && !languages.includes(selectedLanguage)) {
+      setSelectedLanguage('All');
+    }
+  }, [languages, selectedLanguage]);
+
+  const filteredRepos = useMemo(
+    () =>
+      selectedLanguage === 'All'
+        ? repos
+        : repos.filter((repo) => repo.language === selectedLanguage),
+    [repos, selectedLanguage],
+  );
+
+  const filterOptions = ['All', ...languages];
+
   return (
-    <div
-      className={`bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:transform hover:-translate-y-2 animate-slide-up ${
-        featured ? 'lg:col-span-1' : ''
-      }`}
-      style={{ animationDelay: `${index * 150}ms` }}
-    >
-      <div className="relative overflow-hidden">
-        <img
-          src={project.image}
-          alt={project.title}
-          className="w-full h-48 object-cover transition-transform duration-300 hover:scale-110"
-        />
-        <div className="absolute top-4 right-4">
-          <span className="px-3 py-1 bg-primary-600 text-white text-xs rounded-full">
-            {project.category}
-          </span>
-        </div>
-      </div>
-      
-      <div className="p-6">
-        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-          {project.title}
-        </h3>
-        <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
-          {project.description}
+    <div className="animate-fade-in">
+      <section className="max-w-6xl mx-auto px-5 sm:px-8 pt-20 pb-12 sm:pt-28">
+        <p className="label text-[var(--text-faint)] mb-6">{GITHUB_USERNAME}</p>
+        <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl tracking-tight max-w-3xl">
+          Every public repository, pulled live from GitHub.
+        </h1>
+        <p className="mt-7 text-lg text-[var(--text-soft)] max-w-prose">
+          {!loading && !error && repos.length > 0 &&
+            `${repos.length} repositories across ${languages.length} ${
+              languages.length === 1 ? 'language' : 'languages'
+            }. Sorted by last push. Forked and archived repositories are excluded.`}
         </p>
-        
-        {/* Technologies */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          {project.technologies.map((tech) => (
-            <span
-              key={tech}
-              className="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs rounded"
-            >
-              {tech}
+
+        <a
+          href={PROFILE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-8 inline-flex items-center px-5 py-2.5 border border-[var(--rule-strong)] text-[var(--text)] rounded-sm hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors duration-150 text-sm font-medium"
+        >
+          <Github className="mr-2 h-4 w-4" />@{GITHUB_USERNAME}
+        </a>
+      </section>
+
+      {/* Filter */}
+      {!loading && !error && repos.length > 0 && (
+        <div className="border-y border-[var(--rule)]">
+          <div className="max-w-6xl mx-auto px-5 sm:px-8 py-4 flex items-center gap-4 flex-wrap">
+            <span className="label text-[var(--text-faint)]">Filter</span>
+
+            <div className="hidden sm:flex flex-wrap items-center gap-1">
+              {filterOptions.map((language) => (
+                <button
+                  key={language}
+                  onClick={() => setSelectedLanguage(language)}
+                  aria-pressed={selectedLanguage === language}
+                  className={`label px-2.5 py-1.5 rounded-sm transition-colors duration-150 ${
+                    selectedLanguage === language
+                      ? 'bg-[var(--accent-solid)] text-white'
+                      : 'text-[var(--text-faint)] hover:text-[var(--text)]'
+                  }`}
+                >
+                  {language}
+                </button>
+              ))}
+            </div>
+
+            <div className="sm:hidden relative">
+              <button
+                onClick={() => setIsFilterOpen(!isFilterOpen)}
+                aria-expanded={isFilterOpen}
+                className="label text-[var(--text)] border border-[var(--rule-strong)] px-3 py-1.5 rounded-sm"
+              >
+                {selectedLanguage}
+              </button>
+              {isFilterOpen && (
+                <div className="absolute right-0 mt-1.5 w-44 bg-[var(--bg-raised)] border border-[var(--rule)] rounded-sm py-1 z-10 max-h-64 overflow-y-auto">
+                  {filterOptions.map((language) => (
+                    <button
+                      key={language}
+                      onClick={() => {
+                        setSelectedLanguage(language);
+                        setIsFilterOpen(false);
+                      }}
+                      className={`block w-full text-left px-3 py-2 label transition-colors duration-150 ${
+                        selectedLanguage === language
+                          ? 'text-[var(--accent)]'
+                          : 'text-[var(--text-soft)]'
+                      }`}
+                    >
+                      {language}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <span className="label text-[var(--text-faint)] ml-auto">
+              {filteredRepos.length} shown
             </span>
-          ))}
+          </div>
         </div>
-        
-        {/* Action Buttons */}
-        <div className="flex space-x-3">
-          {project.demoUrl && (
-            <a
-              href={project.demoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+      )}
+
+      <section className="max-w-6xl mx-auto px-5 sm:px-8 py-14">
+        {loading && (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {Array.from({ length: 9 }).map((_, index) => (
+              <div
+                key={index}
+                className="border border-[var(--rule)] rounded-sm p-5 h-48 animate-pulse bg-[var(--bg-raised)]"
+              />
+            ))}
+          </div>
+        )}
+
+        {!loading && error && (
+          <div className="max-w-lg mx-auto text-center py-16">
+            <p className="font-display text-2xl mb-3">Could not load repositories</p>
+            <p className="text-[var(--text-soft)] mb-7">{error}</p>
+            <button
+              onClick={retry}
+              className="px-5 py-2.5 bg-[var(--accent-solid)] text-white rounded-sm hover:bg-[var(--accent-hover)] transition-colors duration-150 text-sm font-medium"
             >
-              <ExternalLink className="mr-2 h-4 w-4" />
-              Live Demo
-            </a>
-          )}
-          {project.githubUrl && (
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center px-4 py-2 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-            >
-              <Github className="mr-2 h-4 w-4" />
-              Code
-            </a>
-          )}
-        </div>
-      </div>
+              Try again
+            </button>
+          </div>
+        )}
+
+        {!loading && !error && filteredRepos.length === 0 && (
+          <p className="text-[var(--text-faint)] py-16 text-center">No repositories match this filter.</p>
+        )}
+
+        {!loading && !error && filteredRepos.length > 0 && (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {filteredRepos.map((repo) => (
+              <RepoCard key={repo.id} project={repo} />
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 };

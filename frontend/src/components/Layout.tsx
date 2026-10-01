@@ -1,8 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Sun, Moon, Code2 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import LeetCodeStats from './LeetCodeStats';
+
+const navItems = [
+  { name: 'Home', path: '/' },
+  { name: 'About', path: '/about' },
+  { name: 'Projects', path: '/projects' },
+  { name: 'Blog', path: '/blog' },
+  { name: 'Contact', path: '/contact' },
+];
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,133 +18,142 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
 
-  const navItems = [
-    { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
-    { name: 'Projects', path: '/projects' },
-    { name: 'Blog', path: '/blog' },
-    { name: 'Contact', path: '/contact' },
-  ];
-
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Route change should always close the mobile sheet.
   useEffect(() => {
     setIsMenuOpen(false);
   }, [location]);
 
+  const linkClass = (isActive: boolean) =>
+    `label transition-colors duration-150 py-2 ${
+      isActive
+        ? 'text-[var(--accent)]'
+        : 'text-[var(--text-soft)] hover:text-[var(--accent)]'
+    }`;
+
+  const themeButton =
+    'h-10 w-10 flex items-center justify-center rounded-sm text-[var(--text-soft)] hover:text-[var(--accent)] hover:bg-[var(--bg-sunken)] transition-colors duration-150';
+
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
-      {/* Navigation */}
-      <nav
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled
-          ? 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-lg'
-          : 'bg-transparent'
-          }`}
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] transition-colors duration-300">
+      <header
+        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+          isScrolled
+            ? 'bg-[var(--bg-raised)]/90 backdrop-blur-md border-b border-[var(--rule)]'
+            : 'bg-transparent'
+        }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="flex justify-between items-center h-16">
-            {/* Logo */}
             <Link
               to="/"
-              className="flex items-center space-x-2 text-xl font-bold text-gray-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+              className="flex items-center gap-2 font-display text-xl text-[var(--text)] hover:text-[var(--accent)] transition-colors duration-150"
             >
-              <Code2 className="h-8 w-8" />
+              <Code2 className="h-5 w-5 text-[var(--accent)]" aria-hidden="true" />
               <span>Neeraj Kumhar</span>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  className={`font-medium transition-colors hover:text-primary-600 dark:hover:text-primary-400 ${location.pathname === item.path
-                    ? 'text-primary-600 dark:text-primary-400'
-                    : 'text-gray-700 dark:text-gray-300'
-                    }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
+            <div className="hidden md:flex items-center gap-7">
+              <nav aria-label="Primary">
+                <ul className="flex items-center gap-7">
+                  {navItems.map((item) => (
+                    <li key={item.name}>
+                      <Link
+                        to={item.path}
+                        aria-current={location.pathname === item.path ? 'page' : undefined}
+                        className={linkClass(location.pathname === item.path)}
+                      >
+                        {item.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
 
               <LeetCodeStats />
 
-              {/* Theme Toggle */}
-              <button
-                onClick={toggleTheme}
-                className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                aria-label="Toggle theme"
-              >
-                {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+              <button type="button" onClick={toggleTheme} className={themeButton} aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}>
+                {theme === 'light' ? (
+                  <Moon className="h-4 w-4" aria-hidden="true" />
+                ) : (
+                  <Sun className="h-4 w-4" aria-hidden="true" />
+                )}
               </button>
             </div>
 
-            {/* Mobile menu button */}
-            <div className="md:hidden flex items-center space-x-2">
-              <button
-                onClick={toggleTheme}
-                className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                aria-label="Toggle theme"
-              >
-                {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            <div className="md:hidden flex items-center gap-1">
+              <button type="button" onClick={toggleTheme} className={themeButton} aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}>
+                {theme === 'light' ? (
+                  <Moon className="h-4 w-4" aria-hidden="true" />
+                ) : (
+                  <Sun className="h-4 w-4" aria-hidden="true" />
+                )}
               </button>
               <button
+                type="button"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                aria-label="Toggle menu"
+                aria-expanded={isMenuOpen}
+                aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+                className={themeButton}
               >
-                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {isMenuOpen ? (
+                  <X className="h-5 w-5" aria-hidden="true" />
+                ) : (
+                  <Menu className="h-5 w-5" aria-hidden="true" />
+                )}
               </button>
             </div>
           </div>
+        </div>
 
-          {/* Mobile Navigation */}
-          {isMenuOpen && (
-            <div className="md:hidden absolute top-16 left-0 right-0 bg-white dark:bg-gray-900 shadow-lg border-t dark:border-gray-800">
-              <div className="px-2 pt-2 pb-3 space-y-1">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.path}
-                    className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${location.pathname === item.path
-                      ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20'
-                      : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800'
-                      }`}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-                <div className="px-3 py-2">
-                  <LeetCodeStats />
-                </div>
+        {isMenuOpen && (
+          <div className="md:hidden bg-[var(--bg-raised)] border-b border-[var(--rule)]">
+            <div className="px-5 sm:px-8 py-3">
+              <nav aria-label="Mobile">
+                <ul className="space-y-1">
+                  {navItems.map((item) => (
+                    <li key={item.name}>
+                      <Link
+                        to={item.path}
+                        aria-current={location.pathname === item.path ? 'page' : undefined}
+                        className={`block label px-3 py-3 rounded-sm transition-colors duration-150 ${
+                          location.pathname === item.path
+                            ? 'text-[var(--accent)] bg-[var(--bg-sunken)]'
+                            : 'text-[var(--text-soft)] hover:text-[var(--accent)]'
+                        }`}
+                      >
+                        {item.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+              <div className="px-3 py-3">
+                <LeetCodeStats />
               </div>
             </div>
-          )}
-        </div>
-      </nav>
+          </div>
+        )}
+      </header>
 
-      {/* Main Content */}
       <main className="pt-16">
         {children}
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-50 dark:bg-gray-800 border-t dark:border-gray-700">
-        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <Code2 className="h-6 w-6 text-primary-600 dark:text-primary-400" />
-              <span className="text-gray-900 dark:text-white font-semibold">Neeraj Kumhar</span>
+      <footer className="bg-[var(--bg-sunken)] border-t border-[var(--rule)]">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 py-12">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Code2 className="h-5 w-5 text-[var(--accent)]" aria-hidden="true" />
+              <span className="font-display text-lg">Neeraj Kumhar</span>
             </div>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">
-              © 2025 Neeraj Kumhar. All rights reserved.
+            <p className="label text-[var(--text-faint)]">
+              &copy; {new Date().getFullYear()} Neeraj Kumhar. All rights reserved.
             </p>
           </div>
         </div>

@@ -1,245 +1,196 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Download, Github, Linkedin, Mail, MapPin, Coffee } from 'lucide-react';
-import { projects } from '../data/projects';
+import { ArrowRight, ArrowDownToLine, Github, Linkedin, Mail, MapPin, Zap } from 'lucide-react';
+import { profile, stats, capabilities, featuredProjects } from '../data/profile';
 
-import { useEffect } from 'react';
+const socials = [
+  { href: profile.links.github, icon: Github, label: 'GitHub' },
+  { href: profile.links.linkedin, icon: Linkedin, label: 'LinkedIn' },
+  { href: `mailto:${profile.email}`, icon: Mail, label: 'Email' },
+];
+
 const Home: React.FC = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   return (
     <div className="animate-fade-in">
-      {/* Hero Section */}
-      <section className="min-h-screen flex items-center bg-gradient-to-br from-primary-50 to-accent-50 dark:from-gray-900 dark:to-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Content */}
-            <div className="animate-slide-in-left">
-              <div className="flex items-center space-x-2 text-primary-600 dark:text-primary-400 mb-4">
-                <MapPin className="h-4 w-4" />
-                <span className="text-sm">Jodhpur, India (Remote Ready)</span>
-              </div>
-              <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-6">
-                I Build Scalable Full-Stack Applications.
-              </h1>
-              <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-                Specializing in high-performance React frontends and scalable Node.js backends. 3 years of building production-ready web solutions not just code.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <Link
-                  to="/projects"
-                  className="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors group"
-                >
-                  View My Work
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-                <a
-                  href="/img/resume.pdf"
-                  download
-                  className="inline-flex items-center px-6 py-3 border-2 border-primary-600 text-primary-600 dark:text-primary-400 rounded-lg hover:bg-primary-600 hover:text-white dark:hover:text-white transition-colors"
-                >
-                  <Download className="mr-2 h-4 w-4" />
-                  Download Resume
-                </a>
-              </div>
-              
-              {/* Social Links */}
-              <div className="flex space-x-4">
-                <a
-                  href="https://github.com/Neerajkumhar"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-white dark:hover:bg-gray-700 transition-colors"
-                  aria-label="GitHub"
-                >
-                  <Github className="h-5 w-5" />
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/neeraj-kumhar/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-white dark:hover:bg-gray-700 transition-colors"
-                  aria-label="LinkedIn"
-                >
-                  <Linkedin className="h-5 w-5" />
-                </a>
-                <a
-                  href="mailto:nccrajarod@gmail.com"
-                  className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-white dark:hover:bg-gray-700 transition-colors"
-                  aria-label="Email"
-                >
-                  <Mail className="h-5 w-5" />
-                </a>
-              </div>
-            </div>
-
-            {/* Profile Image */}
-            <div className="animate-slide-up lg:justify-self-end">
-            <div className="relative">
-              <div className="w-80 h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-8 border-white dark:border-gray-800 shadow-2xl bg-gradient-to-br from-primary-100 to-accent-100 dark:from-primary-900/20 dark:to-accent-900/20">
-                <img
-                  src="/img/profile.png"
-                  alt="Neeraj Kumhar"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="absolute -bottom-4 -right-4 bg-white dark:bg-gray-800 p-4 rounded-full shadow-lg animate-bounce-subtle">
-                <Coffee className="h-8 w-8 text-primary-600 dark:text-primary-400" />
-              </div>
-            </div>
-          </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Quick Stats */}
-      <section className="py-20 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8 text-center">
-            {[
-              { number: '3', label: 'Years Experience' },
-              { number: '15+', label: 'Live Projects' },
-              { number: '15+', label: 'Technologies' },
-              { number: 'React & Node.js', label: 'Expert' },
-            ].map((stat, index) => (
-              <div key={index} className="animate-slide-up" style={{ animationDelay: `${index * 100}ms` }}>
-                <div className="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">
-                  {stat.number}
-                </div>
-                <div className="text-gray-600 dark:text-gray-300">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Skills */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              What I Do Best
-            </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              I specialize in creating end-to-end web solutions using cutting-edge technologies
+      {/* Hero */}
+      <section className="max-w-6xl mx-auto px-5 sm:px-8 pt-20 pb-16 sm:pt-28 sm:pb-20">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-16 items-center">
+          <div>
+            <p className="label text-[var(--accent)]">Hello, I&rsquo;m</p>
+            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl tracking-tight mt-4">
+              {profile.name}
+            </h1>
+            <p className="font-display text-xl sm:text-2xl text-[var(--text-soft)] mt-4">
+              {profile.title}
             </p>
+
+            <p className="mt-7 text-lg text-[var(--text-soft)] max-w-prose leading-relaxed">
+              {profile.summary}
+            </p>
+
+            <div className="mt-9 flex flex-wrap items-center gap-3">
+              <Link
+                to="/projects"
+                className="inline-flex items-center px-5 py-2.5 bg-[var(--accent-solid)] text-white rounded-sm hover:bg-[var(--accent-hover)] transition-colors duration-150 text-sm font-medium"
+              >
+                View projects
+                <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
+              </Link>
+              <a
+                href={profile.resume}
+                download
+                className="inline-flex items-center px-5 py-2.5 border border-[var(--rule-strong)] text-[var(--text)] rounded-sm hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors duration-150 text-sm font-medium"
+              >
+                <ArrowDownToLine className="mr-2 h-4 w-4" aria-hidden="true" />
+                Download resume
+              </a>
+            </div>
+
+            <dl className="mt-12 pt-8 border-t border-[var(--rule)] grid grid-cols-2 sm:grid-cols-4 gap-6">
+              {stats.map((stat) => (
+                <div key={stat.label}>
+                  <dt className="label text-[var(--text-faint)]">{stat.label}</dt>
+                  <dd className="font-display text-3xl mt-1">{stat.value}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: 'Frontend Development',
-                description: 'Pixel-perfect implementation of Figma designs using React, Next.js, and Tailwind. Focus on accessibility and performance.',
-                technologies: ['React', 'Next.js', 'Tailwind CSS', 'TypeScript'],
-              },
-              {
-                title: 'Backend Development',
-                description: 'Building secure REST APIs and database architectures with Node.js, Express, and PostgreSQL.',
-                technologies: ['Node.js', 'Express', 'PostgreSQL', 'Docker'],
-              },
-              {
-                title: 'Full-Stack Solutions',
-                description: 'End-to-end development. From database schema design to the final UI deployment.',
-                technologies: ['GraphQL', 'CI/CD', 'Docker', 'Vercel'],
-              },
-            ].map((service, index) => (
-              <div
-                key={index}
-                className="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow animate-slide-up"
-                style={{ animationDelay: `${index * 150}ms` }}
-              >
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                  {service.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-6">
-                  {service.description}
+          <figure>
+            {/* Square source, so `h-auto` with the intrinsic width/height keeps
+                it 1:1 instead of cropping it into a banner. */}
+            <img
+              src={profile.images.portrait.src}
+              alt={profile.images.portrait.alt}
+              width={profile.images.portrait.width}
+              height={profile.images.portrait.height}
+              fetchPriority="high"
+              decoding="async"
+              className="w-full max-w-md h-auto rounded-sm border border-[var(--rule)]"
+            />
+          </figure>
+        </div>
+      </section>
+
+      {/* Capabilities */}
+      <section className="border-y border-[var(--rule)] bg-[var(--bg-sunken)]">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
+          <p className="label text-[var(--accent)]">What I work on</p>
+          <div className="mt-8 grid gap-10 md:grid-cols-3">
+            {capabilities.map((capability) => (
+              <div key={capability.title}>
+                <h2 className="font-display text-xl">{capability.title}</h2>
+                <p className="mt-3 text-[var(--text-soft)] leading-relaxed">
+                  {capability.body}
                 </p>
-                <div className="flex flex-wrap gap-2">
-                  {service.technologies.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded-full text-sm"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Projects Preview Section */}
-      <section className="py-20 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Recent Projects
-            </h2>
-            <p className="text-base sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              A quick look at some of my work.
-            </p>
-          </div>
-          <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.slice(0, 3).map((project, index) => (
-              <div
-                key={project.id}
-                className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow animate-slide-up flex flex-col"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <img src={project.image} alt={project.title} className="w-full h-40 object-cover rounded-lg mb-4" />
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{project.title}</h3>
-                <p className="text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">{project.description}</p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.technologies.map((tech) => (
-                    <span key={tech} className="px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded-full text-xs">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex gap-3 mt-auto">
-                  {project.demoUrl && (
-                    <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-semibold text-sm">
-                      Demo
-                    </a>
-                  )}
-                  {project.githubUrl && (
-                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-900 transition-colors font-semibold text-sm">
-                      GitHub
-                    </a>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-12">
-            <Link to="/projects" className="inline-block px-8 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-semibold">
-              See All Projects
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-primary-600 to-accent-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold text-white mb-4">
-            Ready to Start Your Next Project?
-          </h2>
-          <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
-            Let's work together to bring your ideas to life with modern web technologies
-          </p>
+      {/* Selected work */}
+      <section className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
+        <div className="flex flex-wrap items-baseline justify-between gap-4">
+          <h2 className="section-heading">Selected work</h2>
           <Link
-            to="/contact"
-            className="inline-flex items-center px-8 py-4 bg-white text-primary-600 rounded-lg hover:bg-gray-100 transition-colors text-lg font-semibold"
+            to="/projects"
+            className="label text-[var(--text-soft)] hover:text-[var(--accent)] transition-colors duration-150 inline-flex items-center py-1"
           >
-            Get In Touch
-            <ArrowRight className="ml-2 h-5 w-5" />
+            All repositories
+            <ArrowRight className="ml-2 h-3.5 w-3.5" aria-hidden="true" />
           </Link>
+        </div>
+
+        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {featuredProjects.slice(0, 6).map((project) => (
+            <article
+              key={project.name}
+              className="bg-[var(--bg-raised)] border border-[var(--rule)] rounded-sm p-5 flex flex-col"
+            >
+              <h3 className="font-display text-lg">{project.name}</h3>
+              <p className="label text-[var(--accent)] mt-1">{project.type}</p>
+
+              <ul className="mt-4 space-y-2 text-[var(--text-soft)] text-[0.9rem] flex-1">
+                {project.outcomes.map((outcome) => (
+                  <li key={outcome} className="flex gap-3">
+                    <span aria-hidden="true" className="text-[var(--accent)] select-none">
+                      &rsaquo;
+                    </span>
+                    <span>{outcome}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-5 pt-4 border-t border-[var(--rule)] flex flex-wrap gap-1.5">
+                {project.stack.map((tech) => (
+                  <span
+                    key={tech}
+                    className="label text-[var(--text-faint)] border border-[var(--rule)] rounded-sm px-2 py-0.5"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="border-t border-[var(--rule)] bg-[var(--bg-sunken)]">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-20 text-center">
+          <h2 className="section-heading max-w-2xl mx-auto">
+            Have something that needs shipping?
+          </h2>
+          <p className="mt-5 text-[var(--text-soft)] max-w-prose mx-auto leading-relaxed">
+            I&rsquo;m {profile.availability.toLowerCase()} and take on freelance work. Email is the
+            fastest way to reach me.
+          </p>
+
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+            <Link
+              to="/contact"
+              className="inline-flex items-center px-5 py-2.5 bg-[var(--accent-solid)] text-white rounded-sm hover:bg-[var(--accent-hover)] transition-colors duration-150 text-sm font-medium"
+            >
+              Get in touch
+              <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
+            </Link>
+            <a
+              href={`mailto:${profile.email}`}
+              className="label text-[var(--text-soft)] hover:text-[var(--accent)] transition-colors duration-150 inline-flex items-center py-1"
+            >
+              <Mail className="mr-2 h-4 w-4" aria-hidden="true" />
+              {profile.email}
+            </a>
+          </div>
+
+          <div className="mt-10 flex items-center justify-center gap-6">
+            {socials.map(({ href, icon: Icon, label }) => (
+              <a
+                key={label}
+                href={href}
+                target={href.startsWith('http') ? '_blank' : undefined}
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="-m-1.5 p-1.5 text-[var(--text-soft)] hover:text-[var(--accent)] transition-colors duration-150"
+              >
+                <Icon className="h-4 w-4" aria-hidden="true" />
+              </a>
+            ))}
+          </div>
+
+          <p className="mt-8 inline-flex items-center gap-2 label text-[var(--text-faint)]">
+            <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+            {profile.location}
+            <span aria-hidden="true">&middot;</span>
+            <Zap className="h-3.5 w-3.5" aria-hidden="true" />
+            {profile.availability}
+          </p>
         </div>
       </section>
     </div>

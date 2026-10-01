@@ -1,233 +1,229 @@
-import React from 'react';
-import { Download, Award, Calendar, MapPin, Heart, Code2, Palette, Database } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  ArrowDownToLine,
+  ArrowRight,
+  Briefcase,
+  GraduationCap,
+  Mail,
+  MapPin,
+  Phone,
+  User,
+  Zap,
+} from 'lucide-react';
+import { profile, skills, experience, education } from '../data/profile';
 
-import { useEffect } from 'react';
+const fields = [
+  { icon: User, label: 'Name', value: profile.name },
+  { icon: Mail, label: 'Email', value: profile.email, href: `mailto:${profile.email}` },
+  {
+    icon: Phone,
+    label: 'Phone',
+    value: profile.phone,
+    href: `tel:${profile.phone.replace(/\s/g, '')}`,
+  },
+  { icon: MapPin, label: 'Location', value: profile.location },
+  { icon: Zap, label: 'Availability', value: profile.availability },
+];
+
 const About: React.FC = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  const skills = {
-    'Frontend': {
-      icon: <Palette className="h-6 w-6" />,
-      items: ['React', 'Vue.js', 'TypeScript', 'Next.js', 'Tailwind CSS', 'SASS/SCSS', 'Webpack', 'Vite']
-    },
-    'Backend': {
-      icon: <Database className="h-6 w-6" />,
-      items: ['Node.js', 'Express.js', 'Python', 'Django', 'PostgreSQL', 'MongoDB', 'Redis', 'GraphQL']
-    },
-    'Tools & DevOps': {
-      icon: <Code2 className="h-6 w-6" />,
-      items: ['Git', 'Docker', 'AWS', 'Vercel', 'Jest', 'Cypress', 'CI/CD', 'Linux']
-    }
-  };
-
-  const experience = [
-    {
-      title: 'Intern - Web Developer',
-      company: 'TechFrigate',
-      period: 'Jan 2025 - Jun 2025',
-      description: 'Contributed to full-stack development of client projects using React and Node.js. Gained experience in agile methodologies and version control.',
-      achievements: ['Built core features and fixes', 'Improved unit test coverage', 'Collaborated closely with designers and engineers']
-    },
-
-    
-    {
-      title: 'Lead Developer',
-      company: 'Vagwiin It Solutions',
-      period: '2024 - 2025',
-      description: 'Spearheaded the development of responsive web applications using React and modern CSS frameworks. Collaborated with UX designers to implement pixel-perfect designs.',
-      achievements: ['Built 15+ client projects', 'Reduced bundle size by 35%', 'Introduced TypeScript to team']
-    },
-    {
-      title: 'Full-Stack Developer (Contract)',
-      company: 'JodhanaShop Startup',
-      period: '2022 - 2024',
-      description: 'Built dynamic web applications and learned full-stack development fundamentals. Contributed to both frontend and backend development.',
-      achievements: ['Completed 25+ features', 'Learned 10+ technologies', 'Improved code coverage to 80%']
-    }
-  ];
 
   return (
     <div className="animate-fade-in">
-      {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-primary-50 to-accent-50 dark:from-gray-900 dark:to-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="animate-slide-in-left">
-              <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-                About <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-accent-600">Me</span>
-              </h1>
-              <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-                I am a Full-Stack Engineer focused on performance and scalability. For the past 3 years, I have been building production-grade applications for clients, moving beyond simple websites to complex dashboards and e-commerce systems. I believe in writing clean, maintainable code that agencies can trust.
-              </p>
-              <div className="flex flex-wrap gap-4 mb-8">
-                <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
-                  <MapPin className="h-4 w-4" />
-                    <span>Jodhpur, India (Remote Ready)</span>
-                </div>
-                <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
-                  <Calendar className="h-4 w-4" />
-                  <span>3 Years Experience</span>
-                </div>
-                <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
-                  <Heart className="h-4 w-4" />
-                  <span>Passionate about UX</span>
-                </div>
-              </div>
-              <a
-                href="/img/resume.pdf"
-                download
-                className="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-              >
-                <Download className="mr-2 h-4 w-4" />
-                Download Resume
-              </a>
-            </div>
-            <div className="animate-slide-up">
-              <div className="relative">
-                <img
-                  src="/img/heroimg.png"
-                  alt="Working on projects"
-                  className="rounded-2xl shadow-2xl"
-                />
-                <div className="absolute -bottom-6 -right-6 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
-                  <div className="flex items-center space-x-2">
-                    <Award className="h-8 w-8 text-primary-600 dark:text-primary-400" />
-                    <div>
-                      <div className="font-bold text-gray-900 dark:text-white">15+</div>
-                      <div className="text-sm text-gray-600 dark:text-gray-300">Live Projects</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+      <section className="max-w-6xl mx-auto px-5 sm:px-8 pt-20 pb-12 sm:pt-28">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16 items-center">
+          <div>
+            <p className="label text-[var(--text-faint)] mb-6">About</p>
+            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl tracking-tight">
+              The short version, with the details below.
+            </h1>
+            <p className="mt-7 text-lg text-[var(--text-soft)] leading-relaxed">
+              {profile.summary}
+            </p>
+
+            <a
+              href={profile.resume}
+              download
+              className="mt-8 inline-flex items-center px-5 py-2.5 border border-[var(--rule-strong)] text-[var(--text)] rounded-sm hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors duration-150 text-sm font-medium"
+            >
+              <ArrowDownToLine className="mr-2 h-4 w-4" aria-hidden="true" />
+              Download resume
+            </a>
           </div>
+
+          {/* Hero image. 600x400 source, so h-auto keeps the native 3:2. */}
+          <figure>
+            <img
+              src={profile.images.about.src}
+              alt={profile.images.about.alt}
+              width={profile.images.about.width}
+              height={profile.images.about.height}
+              fetchPriority="high"
+              decoding="async"
+              className="w-full h-auto rounded-sm border border-[var(--rule)]"
+            />
+          </figure>
         </div>
       </section>
 
-      {/* Skills Section */}
-      <section className="py-20 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Technical Skills
-            </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              I work with a diverse set of technologies to deliver comprehensive solutions
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {Object.entries(skills).map(([category, { icon, items }], index) => (
-              <div
-                key={category}
-                className="bg-gray-50 dark:bg-gray-800 p-8 rounded-xl animate-slide-up"
-                style={{ animationDelay: `${index * 150}ms` }}
-              >
-                <div className="flex items-center space-x-3 mb-6">
-                  <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-lg text-primary-600 dark:text-primary-400">
-                    {icon}
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {category}
-                  </h3>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  {items.map((skill) => (
-                    <div
-                      key={skill}
-                      className="px-3 py-2 bg-white dark:bg-gray-900 rounded-lg text-center text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+      {/* Key/value fields */}
+      <section className="border-t border-[var(--rule)]">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16">
+          <dl className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
+            {fields.map(({ icon: Icon, label, value, href }) => (
+              <div key={label} className="flex items-start gap-4">
+                <span className="mt-0.5 text-[var(--accent)]">
+                  <Icon className="h-4 w-4" aria-hidden="true" />
+                </span>
+                <dt className="label text-[var(--text-faint)] w-24 shrink-0 pt-0.5">{label}</dt>
+                <dd className="text-[var(--text)] break-words">
+                  {href ? (
+                    <a
+                      href={href}
+                      className="hover:text-[var(--accent)] transition-colors duration-150"
                     >
-                      {skill}
-                    </div>
+                      {value}
+                    </a>
+                  ) : (
+                    value
+                  )}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      {/* Skills */}
+      <section className="border-t border-[var(--rule)] bg-[var(--bg-sunken)]">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
+          <h2 className="section-heading">Skills</h2>
+          <div className="mt-10 grid gap-x-12 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
+            {skills.map((group) => (
+              <div key={group.category}>
+                <h3 className="label text-[var(--accent)]">{group.category}</h3>
+                <ul className="mt-3 space-y-1.5">
+                  {group.items.map((item) => (
+                    <li key={item} className="text-[var(--text-soft)]">
+                      {item}
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Experience Section */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Professional Experience
-            </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              My journey in web development has been filled with exciting challenges and continuous learning
-            </p>
-          </div>
-
-          <div className="space-y-8">
-            {experience.map((job, index) => (
-              <div
-                key={index}
-                className="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg animate-slide-up"
-                style={{ animationDelay: `${index * 150}ms` }}
+      {/* Experience */}
+      <section className="border-t border-[var(--rule)]">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
+          <h2 className="section-heading">Experience</h2>
+          <div className="mt-10 space-y-8">
+            {experience.map((role) => (
+              <article
+                key={role.title}
+                className="border-t border-[var(--rule)] pt-8 first:border-t-0 first:pt-0 grid gap-6 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] sm:gap-10"
               >
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                <div className="flex gap-4">
+                  <span className="mt-1 text-[var(--accent)] shrink-0">
+                    <Briefcase className="h-4 w-4" aria-hidden="true" />
+                  </span>
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-                      {job.title}
-                    </h3>
-                    <p className="text-primary-600 dark:text-primary-400 font-semibold">
-                      {job.company}
-                    </p>
-                  </div>
-                  <div className="mt-2 md:mt-0">
-                    <span className="px-4 py-2 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded-full text-sm font-medium">
-                      {job.period}
-                    </span>
+                    <h3 className="font-display text-lg">{role.title}</h3>
+                    <p className="text-[var(--text-soft)] mt-0.5">{role.company}</p>
+                    <p className="label text-[var(--text-faint)] mt-2">{role.period}</p>
+                    <p className="label text-[var(--text-faint)] mt-1">{role.location}</p>
                   </div>
                 </div>
-                <p className="text-gray-600 dark:text-gray-300 mb-6">
-                  {job.description}
-                </p>
-                <div className="space-y-2">
-                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    Key Achievements:
-                  </h4>
-                  <ul className="list-disc list-inside space-y-1 text-gray-600 dark:text-gray-300">
-                    {job.achievements.map((achievement, i) => (
-                      <li key={i}>{achievement}</li>
+
+                <div className="text-[var(--text-soft)] leading-relaxed">
+                  <p>{role.summary}</p>
+                  <ul className="mt-4 space-y-2">
+                    {role.achievements.map((achievement) => (
+                      <li key={achievement} className="flex gap-3">
+                        <span aria-hidden="true" className="text-[var(--accent)] select-none">
+                          &rsaquo;
+                        </span>
+                        <span>{achievement}</span>
+                      </li>
                     ))}
                   </ul>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Personal Section */}
-      <section className="py-20 bg-white dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="animate-slide-in-left">
-              <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
-                Beyond the Code
-              </h2>
-              <div className="space-y-4 text-gray-600 dark:text-gray-300">
-                <p>
-                  When I'm not coding, you'll find me exploring the latest in tech, contributing to open-source projects, or sharing my knowledge through blog posts and mentoring.
-                </p>
-                <p>
-                  I'm passionate about creating inclusive and accessible web experiences that make technology available to everyone. I believe that great code should not only work well but also be maintainable and understandable by other developers.
-                </p>
-                <p>
-                  I'm always eager to take on new challenges and collaborate with teams that share my passion for building exceptional digital products.
-                </p>
-              </div>
-            </div>
-            <div className="animate-slide-up">
-              <img
-                src="/img/2.png"
-                alt="Alex in a casual setting"
-                className="rounded-2xl shadow-2xl"
-              />
-            </div>
+      {/* Education */}
+      <section className="border-t border-[var(--rule)] bg-[var(--bg-sunken)]">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
+          <h2 className="section-heading">Education</h2>
+          <div className="mt-10 space-y-8">
+            {education.map((entry) => (
+              <article
+                key={entry.degree}
+                className="border-t border-[var(--rule)] pt-8 first:border-t-0 first:pt-0 flex gap-4"
+              >
+                <span className="mt-1 text-[var(--accent)] shrink-0">
+                  <GraduationCap className="h-4 w-4" aria-hidden="true" />
+                </span>
+                <div>
+                  <h3 className="font-display text-lg">{entry.degree}</h3>
+                  <p className="text-[var(--text-soft)] mt-0.5">{entry.institution}</p>
+                  <p className="label text-[var(--text-faint)] mt-2">
+                    {entry.period} &middot; {entry.location}
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Second image. Same 3:2 source ratio, full container width so its left
+          and right edges line up with the section text. */}
+      <section className="border-t border-[var(--rule)]">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-20">
+          <figure>
+            <img
+              src={profile.images.desk.src}
+              alt={profile.images.desk.alt}
+              width={profile.images.desk.width}
+              height={profile.images.desk.height}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-auto rounded-sm border border-[var(--rule)]"
+            />
+          </figure>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="border-t border-[var(--rule)] bg-[var(--bg-sunken)]">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-20 text-center">
+          <h2 className="section-heading max-w-2xl mx-auto">Want the full picture?</h2>
+          <p className="mt-5 text-[var(--text-soft)] max-w-prose mx-auto leading-relaxed">
+            Every public repository is pulled live from GitHub on the projects page.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              to="/projects"
+              className="inline-flex items-center px-5 py-2.5 bg-[var(--accent-solid)] text-white rounded-sm hover:bg-[var(--accent-hover)] transition-colors duration-150 text-sm font-medium"
+            >
+              Browse projects
+              <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
+            </Link>
+            <Link
+              to="/contact"
+              className="inline-flex items-center px-5 py-2.5 border border-[var(--rule-strong)] text-[var(--text)] rounded-sm hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors duration-150 text-sm font-medium"
+            >
+              Contact me
+            </Link>
           </div>
         </div>
       </section>
